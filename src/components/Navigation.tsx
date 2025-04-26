@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [activeItem, setActiveItem] = useState('');
 
   const menuItems = [
     { text: 'Home', href: '#home' },
@@ -16,8 +17,16 @@ const Navigation = () => {
     { text: 'Contact', href: '#contact' },
   ];
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: string) => {
+    e.preventDefault();
     setIsLoading(true);
+    setActiveItem(item);
+
+    const target = document.querySelector(e.currentTarget.hash);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+
     // Simulate loading for smooth transition
     setTimeout(() => {
       setIsLoading(false);
@@ -30,7 +39,7 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="flex-shrink-0">
-            <h1 className="text-2xl font-serif font-bold text-clinic-gray hover:text-black transition-colors duration-300">
+            <h1 className="text-2xl font-serif font-bold text-clinic-gray hover:text-black transition-colors duration-300 cursor-pointer">
               MindfulCare
             </h1>
           </div>
@@ -41,15 +50,16 @@ const Navigation = () => {
                 <a
                   key={item.text}
                   href={item.href}
-                  onClick={handleNavClick}
-                  className="text-clinic-gray hover:text-black px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:bg-clinic-blue/20 relative group"
+                  onClick={(e) => handleNavClick(e, item.text)}
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 relative group
+                    ${activeItem === item.text ? 'text-clinic-blue' : 'text-clinic-gray hover:text-black'}`}
                 >
-                  {isLoading ? (
-                    <Loader className="animate-spin h-4 w-4 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+                  {isLoading && activeItem === item.text ? (
+                    <Loader className="animate-spin h-4 w-4" />
                   ) : (
                     <>
                       {item.text}
-                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-clinic-gray transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
+                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-clinic-blue transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
                     </>
                   )}
                 </a>
@@ -76,10 +86,11 @@ const Navigation = () => {
               <a
                 key={item.text}
                 href={item.href}
-                onClick={handleNavClick}
-                className="text-clinic-gray hover:text-black block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 hover:bg-clinic-blue/20"
+                onClick={(e) => handleNavClick(e, item.text)}
+                className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300
+                  ${activeItem === item.text ? 'text-clinic-blue bg-clinic-blue/10' : 'text-clinic-gray hover:text-black hover:bg-clinic-blue/20'}`}
               >
-                {isLoading ? (
+                {isLoading && activeItem === item.text ? (
                   <Loader className="animate-spin h-4 w-4" />
                 ) : (
                   item.text
