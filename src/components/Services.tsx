@@ -29,21 +29,28 @@ const Services = () => {
   return (
     <section id="services" className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
+        <div className="text-center animate-fade-in">
           <h2 className="text-3xl font-bold text-clinic-gray font-serif">Our Services</h2>
           <p className="mt-4 text-gray-500">Comprehensive healthcare solutions tailored to your needs</p>
         </div>
         <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((service) => (
-            <Card key={service.title} className="border-none shadow-lg hover:shadow-xl transition-shadow">
+            <Card 
+              key={service.title} 
+              className="border-none shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out hover:-translate-y-1 group cursor-pointer"
+            >
               <CardHeader>
-                <div className="w-12 h-12 mx-auto bg-clinic-blue rounded-full flex items-center justify-center">
-                  <service.icon className="h-6 w-6 text-clinic-gray" />
+                <div className="w-12 h-12 mx-auto bg-clinic-blue rounded-full flex items-center justify-center group-hover:bg-clinic-gray transition-colors duration-300">
+                  <service.icon className="h-6 w-6 text-clinic-gray group-hover:text-white transition-colors duration-300" />
                 </div>
-                <CardTitle className="text-center mt-4">{service.title}</CardTitle>
+                <CardTitle className="text-center mt-4 group-hover:text-clinic-blue transition-colors duration-300">
+                  {service.title}
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-center text-gray-500">{service.description}</p>
+                <p className="text-center text-gray-500 group-hover:text-clinic-gray transition-colors duration-300">
+                  {service.description}
+                </p>
               </CardContent>
             </Card>
           ))}
