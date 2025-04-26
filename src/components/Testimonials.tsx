@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Star, Quote } from "lucide-react";
@@ -45,15 +45,19 @@ const Testimonials = () => {
   ];
 
   const handleDotClick = (index: number) => {
+    if (api) {
+      api.scrollTo(index);
+    }
     setActiveIndex(index);
   };
 
   // Update the active index when the carousel slides
-  React.useEffect(() => {
+  useEffect(() => {
     if (!api) return;
     
     const onSelect = () => {
-      setActiveIndex(api.selectedScrollSnap());
+      const currentIndex = api.selectedScrollSnap();
+      setActiveIndex(currentIndex);
     };
     
     api.on("select", onSelect);
