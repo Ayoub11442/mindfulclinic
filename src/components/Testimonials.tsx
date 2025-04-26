@@ -6,10 +6,12 @@ import { Star, Quote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useIsMobile } from '@/hooks/use-mobile';
+import type { CarouselApi } from "@/components/ui/carousel";
 
 const Testimonials = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const isMobile = useIsMobile();
+  const [api, setApi] = useState<CarouselApi | null>(null);
 
   const testimonials = [
     {
@@ -46,6 +48,22 @@ const Testimonials = () => {
     setActiveIndex(index);
   };
 
+  // Update the active index when the carousel slides
+  React.useEffect(() => {
+    if (!api) return;
+    
+    const onSelect = () => {
+      setActiveIndex(api.selectedScrollSnap());
+    };
+    
+    api.on("select", onSelect);
+    
+    // Cleanup
+    return () => {
+      api.off("select", onSelect);
+    };
+  }, [api]);
+
   return (
     <section id="testimonials" className="py-16 bg-gradient-to-b from-white to-clinic-blue/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,13 +82,7 @@ const Testimonials = () => {
               loop: true,
             }}
             className="w-full"
-            onSelect={(api) => {
-              // Use the carousel API type correctly
-              if (api && typeof api.selectedScrollSnap === 'function') {
-                const selectedIndex = api.selectedScrollSnap();
-                setActiveIndex(selectedIndex);
-              }
-            }}
+            setApi={setApi}
           >
             <CarouselContent>
               {testimonials.map((testimonial, index) => (
