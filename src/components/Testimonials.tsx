@@ -65,9 +65,11 @@ const Testimonials = () => {
             }}
             className="w-full"
             onSelect={(api) => {
-              // Get the selected index from the carousel api instead of using the event directly
-              const selectedIndex = api.selectedScrollSnap();
-              setActiveIndex(selectedIndex);
+              // Use the carousel API type correctly
+              if (api && typeof api.selectedScrollSnap === 'function') {
+                const selectedIndex = api.selectedScrollSnap();
+                setActiveIndex(selectedIndex);
+              }
             }}
           >
             <CarouselContent>
