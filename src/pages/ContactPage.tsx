@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import Layout from '@/components/Layout';
 import PageHeader from '@/components/PageHeader';
@@ -9,6 +8,15 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import { FormError } from '@/components/ui/form-error';
+import { cn } from '@/lib/utils';
+
+interface FormErrors {
+  name?: string;
+  email?: string;
+  subject?: string;
+  message?: string;
+}
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -17,9 +25,31 @@ const ContactPage = () => {
     subject: '',
     message: '',
   });
+  const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
+
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+    
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+    
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -27,16 +57,22 @@ const ContactPage = () => {
       ...prev,
       [name]: value,
     }));
+    // Clear error when user starts typing
+    if (errors[name as keyof FormErrors]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: undefined,
+      }));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate form
-    if (!formData.name || !formData.email || !formData.message) {
+    if (!validateForm()) {
       toast({
         title: "Error",
-        description: "Please fill in all required fields.",
+        description: "Please fix the errors in the form.",
         variant: "destructive",
       });
       return;
@@ -155,10 +191,15 @@ const ContactPage = () => {
                               value={formData.name}
                               onChange={handleChange}
                               placeholder="John Doe"
-                              className="pl-10"
-                              required
+                              className={cn(
+                                "pl-10",
+                                errors.name && "border-destructive focus-visible:ring-destructive"
+                              )}
+                              aria-invalid={!!errors.name}
+                              aria-describedby={errors.name ? "name-error" : undefined}
                             />
                           </div>
+                          <FormError message={errors.name} />
                         </div>
                         <div>
                           <Label htmlFor="email">Your Email*</Label>
@@ -173,10 +214,15 @@ const ContactPage = () => {
                               value={formData.email}
                               onChange={handleChange}
                               placeholder="john.doe@example.com"
-                              className="pl-10"
-                              required
+                              className={cn(
+                                "pl-10",
+                                errors.email && "border-destructive focus-visible:ring-destructive"
+                              )}
+                              aria-invalid={!!errors.email}
+                              aria-describedby={errors.email ? "email-error" : undefined}
                             />
                           </div>
+                          <FormError message={errors.email} />
                         </div>
                       </div>
                       <div>
@@ -187,7 +233,11 @@ const ContactPage = () => {
                           value={formData.subject}
                           onChange={handleChange}
                           placeholder="What is your message about?"
+                          className={cn(
+                            errors.subject && "border-destructive focus-visible:ring-destructive"
+                          )}
                         />
+                        <FormError message={errors.subject} />
                       </div>
                       <div>
                         <Label htmlFor="message">Message*</Label>
@@ -197,9 +247,14 @@ const ContactPage = () => {
                           value={formData.message}
                           onChange={handleChange}
                           placeholder="How can we help you?"
-                          className="resize-none h-40"
-                          required
+                          className={cn(
+                            "resize-none h-40",
+                            errors.message && "border-destructive focus-visible:ring-destructive"
+                          )}
+                          aria-invalid={!!errors.message}
+                          aria-describedby={errors.message ? "message-error" : undefined}
                         />
+                        <FormError message={errors.message} />
                       </div>
                       <Button 
                         type="submit" 
