@@ -1,11 +1,12 @@
 
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, User, Clock, ArrowLeft, Share2, BookmarkPlus, ThumbsUp, MessageSquare, ChevronLeft, ChevronRight, TagIcon } from 'lucide-react';
+import { Calendar, User, Clock, ArrowLeft, Share2, Bookmark, ThumbsUp, MessageSquare, ChevronLeft, ChevronRight, TagIcon } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 // Mock blog post data (same as BlogPage for consistency)
 const blogPosts = [
@@ -175,9 +176,15 @@ const blogPosts = [
 
 const BlogPostPage = () => {
   const { id } = useParams<{id: string}>();
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [post, setPost] = useState<any>(null);
   const [relatedPosts, setRelatedPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [liked, setLiked] = useState(false);
+  const [saved, setSaved] = useState(false);
+  
+  const currentPostId = Number(id);
 
   useEffect(() => {
     // Simulate fetching blog post
@@ -199,8 +206,65 @@ const BlogPostPage = () => {
       }
       
       setLoading(false);
+      // Reset interactive states when post changes
+      setLiked(false);
+      setSaved(false);
     }, 300);
   }, [id]);
+
+  // Handle navigation between articles
+  const handleNavigation = (direction: 'prev' | 'next') => {
+    if (!post) return;
+    
+    // Find the index of current post
+    const currentIndex = blogPosts.findIndex(p => p.id === post.id);
+    if (currentIndex === -1) return;
+    
+    let targetIndex;
+    if (direction === 'prev') {
+      targetIndex = currentIndex > 0 ? currentIndex - 1 : blogPosts.length - 1;
+    } else {
+      targetIndex = currentIndex < blogPosts.length - 1 ? currentIndex + 1 : 0;
+    }
+    
+    navigate(`/blog/${blogPosts[targetIndex].id}`);
+  };
+  
+  // Interaction handlers
+  const handleLike = () => {
+    setLiked(!liked);
+    toast({
+      title: liked ? "Removed like" : "Added like",
+      description: liked ? "You've removed your like from this article" : "You've liked this article",
+      duration: 2000,
+    });
+  };
+  
+  const handleSave = () => {
+    setSaved(!saved);
+    toast({
+      title: saved ? "Removed from saved" : "Saved to your library",
+      description: saved ? "Article removed from your saved items" : "Article added to your saved items",
+      duration: 2000,
+    });
+  };
+  
+  const handleShare = () => {
+    // In a real app, this would use the Web Share API or copy to clipboard
+    toast({
+      title: "Link copied!",
+      description: "Article link copied to clipboard",
+      duration: 2000,
+    });
+  };
+  
+  const handleComment = () => {
+    toast({
+      title: "Comments feature",
+      description: "Comments will be available in a future update",
+      duration: 2000,
+    });
+  };
 
   if (loading) {
     return (
@@ -305,20 +369,40 @@ const BlogPostPage = () => {
           </div>
           
           {/* Social Sharing */}
-          <div className="flex space-x-4 mb-12 py-4 border-t border-b border-gray-200">
-            <Button variant="ghost" size="sm" className="text-gray-600 hover:text-clinic-blue">
+          <div className="flex flex-wrap space-x-2 md:space-x-4 mb-12 py-4 border-t border-b border-gray-200">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={`${liked ? 'text-clinic-blue bg-clinic-blue/10' : 'text-gray-600'} hover:text-clinic-blue`}
+              onClick={handleLike}
+            >
+              <ThumbsUp className={`mr-2 h-4 w-4 ${liked ? 'fill-current' : ''}`} />
+              {liked ? 'Liked' : 'Like'}
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={`${saved ? 'text-clinic-blue bg-clinic-blue/10' : 'text-gray-600'} hover:text-clinic-blue`}
+              onClick={handleSave}
+            >
+              <Bookmark className={`mr-2 h-4 w-4 ${saved ? 'fill-current' : ''}`} />
+              {saved ? 'Saved' : 'Save'}
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-gray-600 hover:text-clinic-blue"
+              onClick={handleShare}
+            >
               <Share2 className="mr-2 h-4 w-4" />
               Share
             </Button>
-            <Button variant="ghost" size="sm" className="text-gray-600 hover:text-clinic-blue">
-              <BookmarkPlus className="mr-2 h-4 w-4" />
-              Save
-            </Button>
-            <Button variant="ghost" size="sm" className="text-gray-600 hover:text-clinic-blue">
-              <ThumbsUp className="mr-2 h-4 w-4" />
-              Like
-            </Button>
-            <Button variant="ghost" size="sm" className="text-gray-600 hover:text-clinic-blue">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-gray-600 hover:text-clinic-blue"
+              onClick={handleComment}
+            >
               <MessageSquare className="mr-2 h-4 w-4" />
               Comment
             </Button>
@@ -349,11 +433,19 @@ const BlogPostPage = () => {
           
           {/* Pagination */}
           <div className="flex justify-between items-center mb-12 py-4 border-t border-b border-gray-200">
-            <Button variant="ghost" className="text-clinic-gray hover:text-clinic-blue">
+            <Button 
+              variant="ghost" 
+              className="text-clinic-gray hover:text-clinic-blue"
+              onClick={() => handleNavigation('prev')}
+            >
               <ChevronLeft className="mr-2 h-4 w-4" />
               Previous Article
             </Button>
-            <Button variant="ghost" className="text-clinic-gray hover:text-clinic-blue">
+            <Button 
+              variant="ghost" 
+              className="text-clinic-gray hover:text-clinic-blue"
+              onClick={() => handleNavigation('next')}
+            >
               Next Article
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
