@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X, Loader, CalendarPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,7 +11,6 @@ const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
-  // Handle scroll effect for sticky navigation
   useEffect(() => {
     const handleScroll = () => {
       const offset = window.scrollY;
@@ -40,7 +38,6 @@ const Navigation = () => {
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: string) => {
-    // Only prevent default for hash links
     if (e.currentTarget.getAttribute('href')?.startsWith('#')) {
       e.preventDefault();
       const target = document.querySelector(e.currentTarget.hash);
@@ -52,7 +49,6 @@ const Navigation = () => {
     setIsLoading(true);
     setActiveItem(item);
 
-    // Simulate loading for smooth transition
     setTimeout(() => {
       setIsLoading(false);
       if (isOpen) setIsOpen(false);
@@ -113,12 +109,11 @@ const Navigation = () => {
             </div>
           </div>
           
-          {/* Book Now Button */}
           <div className="hidden md:flex">
             <Button 
               variant="default" 
               size="sm" 
-              className="bg-clinic-gray hover:bg-black text-white ml-4 px-5 py-2 font-medium transition-all duration-300 animate-pulse hover:animate-none shadow-md hover:shadow-lg"
+              className="bg-clinic-gray hover:bg-black text-white ml-4 px-5 py-2 font-medium transition-all duration-300 shadow-md hover:shadow-lg"
               onClick={() => window.location.href = '/booking'}
             >
               <CalendarPlus className="mr-2 h-4 w-4" />
@@ -168,7 +163,6 @@ const Navigation = () => {
               </Link>
             ))}
             
-            {/* Mobile Book Now Button */}
             <div className="pt-2">
               <Button 
                 variant="default" 
