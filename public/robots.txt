@@ -1,3 +1,9 @@
+
+User-agent: *
+Allow: /
+
+Sitemap: https://mindfulcare.clinic/sitemap.xml
+
 User-agent: Googlebot
 Allow: /
 
@@ -10,5 +16,6 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
+# Prevent crawling of admin sections
 User-agent: *
-Allow: /
+Disallow: /admin/
