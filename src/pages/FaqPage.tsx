@@ -45,7 +45,7 @@ const faqItems: FaqItem[] = [
   {
     id: 'faq-4',
     question: 'What is your cancellation policy?',
-    answer: 'We request at least 24 hours' notice for appointment cancellations. Late cancellations (less than 24 hours) or no-shows may result in a fee. We understand that emergencies happen, so please contact us as soon as possible if you cannot make your appointment.',
+    answer: "We request at least 24 hours' notice for appointment cancellations. Late cancellations (less than 24 hours) or no-shows may result in a fee. We understand that emergencies happen, so please contact us as soon as possible if you cannot make your appointment.",
     category: 'policies'
   },
   {
