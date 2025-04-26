@@ -1,5 +1,5 @@
 
-import { Medkit, Heart, Tooth, Stethoscope } from 'lucide-react';
+import { Stethoscope, HeartPulse, Scissors, Users } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const Services = () => {
@@ -7,22 +7,22 @@ const Services = () => {
     {
       title: "General Medicine",
       description: "Comprehensive healthcare services for all your general medical needs.",
-      icon: Medkit
+      icon: Stethoscope
     },
     {
       title: "Cardiology",
       description: "Expert heart care and cardiovascular health services.",
-      icon: Heart
+      icon: HeartPulse
     },
     {
       title: "Dental Care",
       description: "Complete dental services for a healthy and beautiful smile.",
-      icon: Tooth
+      icon: Scissors
     },
     {
       title: "Specialist Consultations",
       description: "Access to specialized medical expertise for specific conditions.",
-      icon: Stethoscope
+      icon: Users
     }
   ];
 
