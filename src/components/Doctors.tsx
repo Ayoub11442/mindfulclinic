@@ -8,19 +8,19 @@ const Doctors = () => {
       name: "Dr. Sarah Johnson",
       specialty: "General Medicine",
       bio: "Dr. Johnson has over 15 years of experience in general medicine and is dedicated to providing comprehensive care to her patients.",
-      image: "https://placehold.co/400x400.png",
+      image: "https://media.istockphoto.com/id/1359854139/photo/this-is-a-portrait-of-a-young-woman-who-has-recently-become-a-doctor-she-gives-a-pose-of.jpg?s=612x612&w=0&k=20&c=bRKzM0M_qy03N-Vzs-q07-PLlxnIuD0qgiBCc7NLM5I=",
     },
     {
       name: "Dr. Michael Chen",
       specialty: "Cardiology",
       bio: "A renowned cardiologist with expertise in preventive cardiology and heart disease management.",
-      image: "https://placehold.co/400x400.png",
+      image: "https://media.istockphoto.com/id/910063086/photo/portrait-of-young-man-doctor-against-white-background.jpg?s=612x612&w=0&k=20&c=ciR2IvJ6Kda8w_UR1F7lvh7SXVKUzcbYn9ZHlzv7bo4=",
     },
     {
       name: "Dr. Emily Martinez",
       specialty: "Dental Care",
       bio: "Specialized in cosmetic dentistry and oral health, Dr. Martinez ensures every patient leaves with a confident smile.",
-      image: "https://placehold.co/400x400.png",
+      image: "https://media.istockphoto.com/id/650689018/photo/portrait-of-young-beautiful-woman-doctor-against-gray-background.jpg?s=612x612&w=0&k=20&c=YqEBCLZ2I1KCuC-nTOzcWvKbh0V3dSoc1kn35PfpSAU=",
     }
   ];
 
