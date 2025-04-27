@@ -20,10 +20,20 @@ import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 
 // Define AOS interface for TypeScript
+interface AosOptions {
+  duration?: number;
+  easing?: string;
+  once?: boolean;
+  mirror?: boolean;
+  offset?: number;
+  delay?: number;
+  anchor?: string;
+}
+
 declare global {
   interface Window {
     AOS: {
-      init: (options: any) => void;
+      init: (options: AosOptions) => void;
       refresh: () => void;
     }
   }

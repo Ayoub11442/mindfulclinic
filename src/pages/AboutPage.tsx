@@ -94,7 +94,7 @@ const AboutPage = () => {
             </div>
             <div className="order-1 lg:order-2 overflow-hidden rounded-xl shadow-xl">
               <img 
-                src="https://placehold.co/800x600.png" 
+                src="https://images.pexels.com/photos/3779705/pexels-photo-3779705.jpeg" 
                 alt="Medical team at MindfulCare" 
                 className="w-full h-auto object-cover transform transition-transform duration-500 hover:scale-105"
               />
